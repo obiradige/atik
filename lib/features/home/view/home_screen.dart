@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.width;
-    final homeCubit = context.watch<HomeCubit>().state;
+    //final homeCubit = context.watch<HomeCubit>().state;
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -36,7 +36,11 @@ class HomeScreen extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 0.1,
           centerTitle: true,
-          title: Text(homeCubit.baseMunicipalityModel!.municipalityName),
+          title: Builder(
+            builder: (context) {
+              return Text(context.watch<HomeCubit>().state.baseMunicipalityModel!.municipalityName);
+            }
+          ),
           // leading: Center(
           //   child:Image.network('${Constants.getBaseUrl()}/${homeCubit.baseMunicipalityModel?.image}')
           // ),
@@ -45,9 +49,9 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              SizedBox(
-                  height: h * 0.17,
-                  child: Image.network('${Constants.getBaseUrl()}/${homeCubit.baseMunicipalityModel?.cardImage}')),
+              // SizedBox(
+              //     height: h * 0.17,
+              //     child: Image.network('${Constants.getBaseUrl()}/${homeCubit.baseMunicipalityModel?.cardImage}')),
               Column(
                 children: [
                   Row(

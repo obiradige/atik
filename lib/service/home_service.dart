@@ -1,6 +1,6 @@
 import 'package:atik/constants/locator.dart';
 import 'package:atik/constants/secure_storage.dart';
-import 'package:atik/models/municipality_model.dart';
+import 'package:atik/model/municipality_model.dart';
 import 'package:dio/dio.dart';
 
 class HomeService {

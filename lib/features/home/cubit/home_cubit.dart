@@ -1,4 +1,4 @@
-import 'package:atik/models/municipality_model.dart';
+import 'package:atik/model/municipality_model.dart';
 import 'package:atik/service/home_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';

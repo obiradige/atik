@@ -1,7 +1,7 @@
 import 'package:atik/constants/locator.dart';
 import 'package:atik/constants/secure_storage.dart';
 import 'package:atik/features/home/view/home_screen.dart';
-import 'package:atik/models/user.dart';
+import 'package:atik/model/user.dart';
 import 'package:atik/service/login_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';

@@ -1,6 +1,6 @@
 
 import 'package:atik/constants/locator.dart';
-import 'package:atik/models/user.dart';
+import 'package:atik/model/user.dart';
 import 'package:dio/dio.dart';
 
 class LoginService {
