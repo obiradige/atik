@@ -1,18 +1,17 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-
 class ApiService {
   ApiService({this.isMacellan = false});
 
   Dio dio = Dio();
 
   final bool isMacellan;
-  String user = 'test';
-  String basicAuth = 'Basic ${base64Encode(utf8.encode('test:test'))}';
+  
+  String basicAuth = '';
   final baseUrl = 'https://anibalbilisim.com/sifiratik/api/v1';
   final baseMacellanUrl = 'https://api.altpay.dev';
-  final String _bearerAuth = 'MACELLAN TOKEN';
+  final String _bearerAuth = '';
 
   Dio init() {
     dio.options.headers.addAll({

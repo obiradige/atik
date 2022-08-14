@@ -19,6 +19,7 @@ class LoginService {
           'password': password,
         },
       );
+      // ignore: no_leading_underscores_for_local_identifiers
       final _user = User.fromJson(response.data as Map<String, dynamic>);
       return _user;
     } catch (e) {

@@ -1,17 +1,24 @@
 import 'package:atik/constants/contants.dart';
+import 'package:atik/constants/locator.dart';
+import 'package:atik/constants/secure_storage.dart';
 import 'package:atik/features/home/cubit/home_cubit.dart';
+import 'package:atik/features/home/view/pincode.dart';
+import 'package:atik/features/home/view/qr_screen.dart';
+import 'package:atik/features/reports/view/report_screen.dart';
+import 'package:atik/features/welcome/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class HomeScreen extends StatelessWidget {
-   HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
 
+  final SecureStorage _secureStorage = getIt<SecureStorage>();
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.width;
-    //final homeCubit = context.watch<HomeCubit>().state;
+    final homeCubit = context.watch<HomeCubit>().state;
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -27,7 +34,14 @@ class HomeScreen extends StatelessWidget {
                   color: Colors.amber,
                   icon: Image.asset("assets/cancel.png", fit: BoxFit.cover),
                   onPressed: () {
-                    
+                    _secureStorage.deleteAll();
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      // ignore: inference_failure_on_instance_creation
+                      MaterialPageRoute(
+                          builder: (context) => const WelcomeScreen()),
+                      (Route<dynamic> route) => false,
+                    );
                   },
                 ),
               ),
@@ -36,22 +50,28 @@ class HomeScreen extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 0.1,
           centerTitle: true,
-          title: Builder(
-            builder: (context) {
-              return Text(context.watch<HomeCubit>().state.baseMunicipalityModel!.municipalityName);
-            }
-          ),
-          // leading: Center(
-          //   child:Image.network('${Constants.getBaseUrl()}/${homeCubit.baseMunicipalityModel?.image}')
-          // ),
+          title: homeCubit.baseMunicipalityModel?.municipalityName != null
+              ? Text(
+                  '${homeCubit.baseMunicipalityModel?.municipalityName}',
+                  style: TextStyle(color: Constants.greens),
+                )
+              : const SizedBox(),
+          leading: Center(
+              child: homeCubit.baseMunicipalityModel?.image != null
+                  ? Image.network(
+                      '${Constants.getBaseUrl()}/${homeCubit.baseMunicipalityModel?.image}')
+                  : const SizedBox()),
         ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              // SizedBox(
-              //     height: h * 0.17,
-              //     child: Image.network('${Constants.getBaseUrl()}/${homeCubit.baseMunicipalityModel?.cardImage}')),
+              SizedBox(
+                  height: h * 0.33,
+                  child: homeCubit.baseMunicipalityModel?.cardImage != null
+                      ? Image.network(
+                          '${Constants.getBaseUrl()}/${homeCubit.baseMunicipalityModel?.cardImage}')
+                      : Image.asset("assets/atik_hesapla.png")),
               Column(
                 children: [
                   Row(
@@ -62,10 +82,29 @@ class HomeScreen extends StatelessWidget {
                           PermissionStatus cameraStatus =
                               await Permission.camera.request();
                           if (cameraStatus == PermissionStatus.granted) {
-                            
+                            // ignore: use_build_context_synchronously
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const QrScanPage(),
+                              ),
+                            );
                           }
                           if (cameraStatus == PermissionStatus.denied) {
-                            print("hata");
+                            final snackBar = SnackBar(
+                              content: const Text('Lütfen kamera izninin veriniz'),
+                              action: SnackBarAction(
+                                label: 'Tamam',
+                                onPressed: () {
+                                  // Some code to undo the change.
+                                },
+                              ),
+                            );
+
+                           
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
                           }
                           if (cameraStatus ==
                               PermissionStatus.permanentlyDenied) {
@@ -106,7 +145,12 @@ class HomeScreen extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                         
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PinCode(),
+                            ),
+                          );
                         },
                         child: Container(
                             decoration: BoxDecoration(
@@ -131,7 +175,7 @@ class HomeScreen extends StatelessWidget {
                                   "Kodu Giriniz",
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize:w * 0.045,
+                                      fontSize: w * 0.045,
                                       fontWeight: FontWeight.w600),
                                 )
                               ],
@@ -159,7 +203,12 @@ class HomeScreen extends StatelessWidget {
                       width: w * 0.45,
                       child: MaterialButton(
                           onPressed: () {
-                           
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ReportPage(),
+                              ),
+                            );
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -172,8 +221,7 @@ class HomeScreen extends StatelessWidget {
                               Text(
                                 "Raporlar",
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: w * 0.05),
+                                    color: Colors.white, fontSize: w * 0.05),
                               )
                             ],
                           ))),
